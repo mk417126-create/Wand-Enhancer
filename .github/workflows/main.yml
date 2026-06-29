@@ -1,0 +1,14 @@
+// Injected scripts can run multiple times — guard one-time setup.
+if (!globalThis.__helloScriptInstalled) {
+  globalThis.__helloScriptInstalled = true;
+
+  WandEnhancer.log("Hello from my custom script!", WandEnhancer.remoteUrl);
+
+  new MutationObserver(() => {
+    const dialog = document.querySelector("ux-dialog:not([data-seen])");
+    if (dialog) {
+      dialog.setAttribute("data-seen", "1");
+      WandEnhancer.log("A dialog opened.");
+    }
+  }).observe(document.documentElement, { childList: true, subtree: true });
+}
